@@ -1,5 +1,9 @@
 import pandas
 import numpy as np
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LinearRegression
+from sklearn.metrics import mean_squared_error, mean_absolute_error
+
 
 ''' 
 The following is the starting code for path2 for data reading to make your first step easier.
@@ -29,5 +33,25 @@ print(correlations)
 # as a result, we should put sensors on all the bridges except for the Brooklyn Bridge
 
 # QUESTION 2
+
+tempData = dataset_2[['Low Temp', 'High Temp', 'Precipitation']]
+totalData = dataset_2['Total']
+
+# training and testing sets of data
+tempTrain, tempTest, totalTrain, totalTest = train_test_split(tempData, totalData, test_size = 0.2, random_state = 42)
+
+linearModel = LinearRegression()
+linearModel.fit(tempTrain, totalTrain)
+
+# making predictions
+totalPred = linearModel.predict(tempTest)
+
+# calculate correlation
+dataCorrelation = np.corrcoef(totalTest, totalPred)[0, 1]
+print("Correlation Analysis for Temp Data ", round(dataCorrelation, 6))
+
+# the print statement shows that the correlation of predicted and actual data is 0.763 which doesn't correspond to a strong correlation, 
+# meaning that the model's predictions are not very similar to the actual values 
+# so they can use the data but the results won't be extremelly accurate but pointing to the right direction
 
 # QUESTION 3
